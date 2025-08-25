@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMSH Interne Kommunikation - Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">GMSH</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="newsletter/index.html" class="nav-link">Newsletter</a>
+                </li>
+                <li class="nav-item">
+                    <a href="intranet/index.html" class="nav-link">Intranet</a>
+                </li>
+                <li class="nav-item">
+                    <a href="case-study/index.html" class="nav-link">Fallstudie</a>
+                </li>
+                <li class="nav-item">
+                    <a href="intro/index.html" class="nav-link">Video</a>
+                </li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-background"></div>
+            <div class="container">
+                <div class="hero-content fade-in">
+                    <h1 class="hero-title">Interne Kommunikation beim GMSH</h1>
+                    <p class="hero-subtitle">Diese interaktive Demo zeigt Ihnen anhand verschiedener Formate, wie interne Kommunikation beim GMSH echten Mehrwert stiften kann. Statt technischer Spielerei werden hier konkrete Beispiele präsentiert: ein Newsletter, der informiert und zur Teilnahme einlädt; ein Intranet, das Wissen bündelt und Zusammenarbeit fördert; eine Video-Serie, die Menschen vorstellt und Geschichten erzählt.</p>
+                    <p class="hero-description">Sie sehen hier, wie transparente Kommunikation Brücken baut: Informationen werden zielgruppengerecht aufbereitet, Feedback wird integriert und Mitarbeitende werden ermutigt, sich einzubringen.</p>
+                    <p class="hero-description">Als Bewerber bringe ich meine Erfahrung in Employer Branding, Content-Konzeption und Medienproduktion mit ein, um gemeinsam mit Ihnen eine lebendige, empathische Kommunikationskultur zu schaffen.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card glass-card fade-in">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Newsletter</h3>
+                        <p class="feature-description">Informiert und lädt zur Teilnahme ein</p>
+                    </div>
+                    
+                    <div class="feature-card glass-card fade-in">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Intranet</h3>
+                        <p class="feature-description">Bündelt Wissen und fördert Zusammenarbeit</p>
+                    </div>
+                    
+                    <div class="feature-card glass-card fade-in">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="23 7 16 12 23 17 23 7"/>
+                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Video-Formate</h3>
+                        <p class="feature-description">Stellt Menschen vor und erzählt Geschichten</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section class="process">
+            <div class="container">
+                <h2 class="section-title fade-in">So arbeite ich</h2>
+                <div class="process-grid">
+                    <div class="process-step glass-card fade-in">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Analyse</h3>
+                        <p class="step-description">Verstehen der Zielgruppen, Bedürfnisse und bestehenden Kommunikationsstrukturen</p>
+                    </div>
+                    
+                    <div class="process-step glass-card fade-in">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Umsetzung</h3>
+                        <p class="step-description">Entwicklung zielgruppengerechter Formate und Inhalte mit klarem Mehrwert</p>
+                    </div>
+                    
+                    <div class="process-step glass-card fade-in">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Messung</h3>
+                        <p class="step-description">Kontinuierliche Erfolgsmessung durch KPIs und Feedback-Integration</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo Components Section -->
+        <section class="demo-components">
+            <div class="container">
+                <h2 class="section-title fade-in">Demo-Bausteine</h2>
+                <div class="components-grid">
+                    <a href="newsletter/index.html" class="component-card glass-card fade-in">
+                        <div class="component-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </div>
+                        <h3 class="component-title">Newsletter</h3>
+                        <p class="component-description">Beispiele für zielgruppengerechte Newsletter-Inhalte</p>
+                    </a>
+                    
+                    <a href="intranet/index.html" class="component-card glass-card fade-in">
+                        <div class="component-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                        </div>
+                        <h3 class="component-title">Intranet</h3>
+                        <p class="component-description">Strukturierte Informationsarchitektur für bessere Zusammenarbeit</p>
+                    </a>
+                    
+                    <a href="case-study/index.html" class="component-card glass-card fade-in">
+                        <div class="component-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>
+                        </div>
+                        <h3 class="component-title">Fallstudie</h3>
+                        <p class="component-description">Konkrete Projektbeispiele und Lessons Learned</p>
+                    </a>
+                    
+                    <a href="intro/index.html" class="component-card glass-card fade-in">
+                        <div class="component-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="23 7 16 12 23 17 23 7"/>
+                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                            </svg>
+                        </div>
+                        <h3 class="component-title">Intro-Video</h3>
+                        <p class="component-description">Persönliche Vorstellung und Kommunikationsansatz</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- HR Callout -->
+        <section class="hr-callout">
+            <div class="container">
+                <div class="callout-card glass-card fade-in">
+                    <div class="callout-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                            <path d="M12 17h.01"/>
+                        </svg>
+                    </div>
+                    <div class="callout-content">
+                        <h3 class="callout-title">Für HR-Entscheider</h3>
+                        <p class="callout-text">Diese Demo zeigt konkrete Ansätze für eine moderne, empathische Kommunikationskultur. Jedes Format wurde mit Blick auf Mitarbeiterbindung und -engagement entwickelt.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
+

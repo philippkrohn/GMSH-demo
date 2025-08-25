@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fallstudie - GMSH Interne Kommunikation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="../index.html" class="logo-text">GMSH</a>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="../index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../newsletter/index.html" class="nav-link">Newsletter</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../intranet/index.html" class="nav-link">Intranet</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">Fallstudie</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../intro/index.html" class="nav-link">Video</a>
+                </li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-title fade-in">Fallstudie: Video-Serie "Menschen der GMSH"</h1>
+                <p class="page-subtitle fade-in">Von der Idee zur Umsetzung - Ein Praxisbeispiel für erfolgreiche interne Kommunikation</p>
+            </div>
+        </section>
+
+        <!-- Case Study Timeline -->
+        <section class="case-study-timeline">
+            <div class="container">
+                <div class="timeline">
+                    <!-- Step 1: Ausgangslage -->
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-marker">
+                            <div class="marker-number">1</div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card glass-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Ausgangslage</h3>
+                                    <div class="card-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                                            <path d="M12 17h.01"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <p>Mitarbeitende kennen sich untereinander kaum, besonders zwischen verschiedenen Standorten und Abteilungen. Die Identifikation mit dem Unternehmen ist gering, da die "Gesichter hinter den Namen" fehlen.</p>
+                                    <div class="card-metrics">
+                                        <div class="metric">
+                                            <span class="metric-value">65%</span>
+                                            <span class="metric-label">Mitarbeitende kennen nur ihr direktes Team</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Ziele -->
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-marker">
+                            <div class="marker-number">2</div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card glass-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Ziele</h3>
+                                    <div class="card-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4"/>
+                                            <path d="M9 7h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9"/>
+                                            <circle cx="9" cy="9" r="2"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <ul class="goal-list">
+                                        <li>Stärkung der Unternehmensidentität durch persönliche Geschichten</li>
+                                        <li>Förderung der standortübergreifenden Vernetzung</li>
+                                        <li>Erhöhung der Mitarbeiterbindung und -zufriedenheit</li>
+                                        <li>Verbesserung des Employer Brandings nach innen</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Konzept -->
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-marker">
+                            <div class="marker-number">3</div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card glass-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Konzept & Storyboard</h3>
+                                    <div class="card-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                            <polyline points="14,2 14,8 20,8"/>
+                                            <line x1="16" y1="13" x2="8" y2="13"/>
+                                            <line x1="16" y1="17" x2="8" y2="17"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="concept-grid">
+                                        <div class="concept-item">
+                                            <h4>Format</h4>
+                                            <p>3-5 Minuten Porträt-Videos mit authentischen Einblicken in Arbeitsalltag und Motivation</p>
+                                        </div>
+                                        <div class="concept-item">
+                                            <h4>Frequenz</h4>
+                                            <p>Monatliche Veröffentlichung, rotierend zwischen verschiedenen Bereichen</p>
+                                        </div>
+                                        <div class="concept-item">
+                                            <h4>Kanäle</h4>
+                                            <p>Intranet, Newsletter, digitale Displays in den Eingangsbereichen</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Mockups -->
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-marker">
+                            <div class="marker-number">4</div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card glass-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Mockups & Prototyping</h3>
+                                    <div class="card-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                            <line x1="8" y1="21" x2="16" y2="21"/>
+                                            <line x1="12" y1="17" x2="12" y2="21"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="mockup-gallery">
+                                        <div class="mockup-item">
+                                            <div class="mockup-placeholder">
+                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <polygon points="23 7 16 12 23 17 23 7"/>
+                                                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                                                </svg>
+                                            </div>
+                                            <p>Video-Template Design</p>
+                                        </div>
+                                        <div class="mockup-item">
+                                            <div class="mockup-placeholder">
+                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                                    <rect x="7" y="7" width="3" height="9"/>
+                                                    <rect x="14" y="7" width="3" height="5"/>
+                                                </svg>
+                                            </div>
+                                            <p>Intranet-Integration</p>
+                                        </div>
+                                        <div class="mockup-item">
+                                            <div class="mockup-placeholder">
+                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                                    <polyline points="22,6 12,13 2,6"/>
+                                                </svg>
+                                            </div>
+                                            <p>Newsletter-Layout</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Lessons Learned -->
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-marker">
+                            <div class="marker-number">5</div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card glass-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Lessons Learned</h3>
+                                    <div class="card-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M9 12l2 2 4-4"/>
+                                            <path d="M21 12c.552 0 1-.448 1-1V5c0-.552-.448-1-1-1H3c-.552 0-1 .448-1 1v6c0 .552.448 1 1 1h9l4 4V12z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="lessons-grid">
+                                        <div class="lesson-item success">
+                                            <h4>Was gut funktioniert hat</h4>
+                                            <ul>
+                                                <li>Authentische, ungeskriptete Gespräche</li>
+                                                <li>Fokus auf persönliche Motivation statt Jobbeschreibung</li>
+                                                <li>Kurze, prägnante Formate (3-5 Min.)</li>
+                                                <li>Regelmäßige Veröffentlichung schafft Erwartung</li>
+                                            </ul>
+                                        </div>
+                                        <div class="lesson-item improvement">
+                                            <h4>Verbesserungspotential</h4>
+                                            <ul>
+                                                <li>Mehr Diversität bei der Auswahl der Protagonisten</li>
+                                                <li>Stärkere Einbindung von Feedback-Mechanismen</li>
+                                                <li>Cross-Promotion zwischen verschiedenen Kanälen</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Mehrwert -->
+                    <div class="timeline-item fade-in">
+                        <div class="timeline-marker">
+                            <div class="marker-number">6</div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-card glass-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Mehrwert & Ergebnisse</h3>
+                                    <div class="card-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="results-grid">
+                                        <div class="result-metric">
+                                            <div class="metric-value">+42%</div>
+                                            <div class="metric-label">Steigerung der Intranet-Nutzung</div>
+                                        </div>
+                                        <div class="result-metric">
+                                            <div class="metric-value">+28%</div>
+                                            <div class="metric-label">Verbesserung der Mitarbeiterzufriedenheit</div>
+                                        </div>
+                                        <div class="result-metric">
+                                            <div class="metric-value">85%</div>
+                                            <div class="metric-label">Positive Resonanz in Umfragen</div>
+                                        </div>
+                                        <div class="result-metric">
+                                            <div class="metric-value">12</div>
+                                            <div class="metric-label">Produzierte Video-Porträts</div>
+                                        </div>
+                                    </div>
+                                    <div class="impact-summary">
+                                        <h4>Langfristige Auswirkungen</h4>
+                                        <p>Die Video-Serie hat nicht nur die interne Vernetzung gestärkt, sondern auch als Vorbild für weitere Kommunikationsformate gedient. Mitarbeitende melden sich proaktiv für Porträts an und teilen die Videos in ihren privaten Netzwerken.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HR Callout -->
+        <section class="hr-callout">
+            <div class="container">
+                <div class="callout-card glass-card fade-in">
+                    <div class="callout-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                            <path d="M12 17h.01"/>
+                        </svg>
+                    </div>
+                    <div class="callout-content">
+                        <h3 class="callout-title">Projektmanagement</h3>
+                        <p class="callout-text">Diese Fallstudie zeigt, wie strukturiertes Vorgehen und kontinuierliche Evaluation zu nachhaltigen Kommunikationserfolgen führen. Jeder Schritt wurde dokumentiert und optimiert.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../assets/js/app.js"></script>
+</body>
+</html>
+
