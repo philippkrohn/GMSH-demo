@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Intranet – Aktuelle Parksituation</title>
+<style>
+body { margin: 0; font-family: Arial, sans-serif; background: #eef2f7; }
+.navbar { background: #003f7d; color: white; padding: 12px 20px; display: flex; gap: 20px; align-items: center; }
+.navbar a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; }
+.navbar a:hover { text-decoration: underline; }
+.sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 220px; background: #003f7d; color: white; padding-top: 60px; }
+.sidebar h2 { margin: 0 0 20px 20px; font-size: 18px; }
+.sidebar ul { list-style: none; padding-left: 20px; }
+.sidebar li { margin-bottom: 15px; }
+.sidebar a { color: white; text-decoration: none; font-size: 14px; }
+.header { margin-left: 220px; background: #0070b8; color: white; padding: 20px; }
+.header h1 { margin: 0; font-size: 24px; }
+.content { margin-left: 220px; padding: 20px; }
+.card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.card h2 { color: #003f7d; margin-top: 0; }
+.card p { line-height: 1.5; }
+.card ul { padding-left: 20px; }
+.card li { margin-bottom: 8px; }
+/* CTA button style */
+a.cta-button {
+  background: #c5002e;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+a.cta-button:hover {
+  background: #a40024;
+}
+a.cta-button svg {
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+.hr-explanation { background: #f9f3f3; border-left: 4px solid #c5002e; padding: 15px; margin-top: 30px; color: #333; }.hr-explanation h3 { margin-top: 0; color: #003f7d; }</style>
+</head>
+<body>
+<nav class="navbar">
+    <img src="../assets/logo_gmsh.png" alt="GMSH Logo" style="height:30px;width:auto;margin-right:10px;vertical-align:middle;object-fit:contain;" />
+    <a href="../index.html">Startseite</a>
+    <a href="../newsletter/index.html">Newsletter</a>
+    <a href="../intranet/index.html">Intranet</a>
+    <a href="../case-study/index.html">Fallstudie</a>
+    <a href="../intro/index.html">Vorstellungsvideo</a>
+</nav>
+<div class="sidebar">
+  <h2>Navigation</h2>
+  <ul>
+    <li><a href="index.html">Startseite</a></li>
+    <li><a href="aktuelles.html">Aktuelles</a></li>
+    <li><a href="projekte.html">Projekte</a></li>
+    <li><a href="teams.html">Teams</a></li>
+    <li><a href="sanierung_neubau.html">Sanierung &amp; Neubau</a></li>
+    <li><a href="digitalisierung_prozesse.html">Digitalisierung &amp; Prozesse</a></li>
+    <li><a href="mobilitaet_klima.html">Mobilität &amp; Klima</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="downloads.html">Downloads</a></li>
+    <li><a href="jobboerse.html">Jobbörse</a></li>
+    <li><a href="services.html">Services &amp; Benefits</a></li>
+  </ul>
+</div>
+<div class="header"><h1>GMSH Intranet</h1></div>
+<div class="content">
+
+<div class="card">
+  <h2>Aktuelle Parksituation am Standort XYZ</h2>
+  <p>Auf unserem Campus XYZ sind die Parkplätze derzeit stark ausgelastet. Wir möchten dir helfen, entspannt anzukommen und Alternativen zu finden.</p>
+  <ul>
+    <li><strong>ÖPNV &amp; Pendelbuss:</strong> Nutze die guten Bus‑ und Bahnverbindungen. Auf der Intranet‑Startseite findest du einen Link zum Fahrplan.</li>
+    <li><strong>Fahrrad &amp; Carpool:</strong> Viele Kolleg:innen bilden Fahrgemeinschaften oder kommen mit dem Rad. Im Intranet gibt es eine Mitfahrbörse, in der du Mitfahrer:innen finden kannst.</li>
+    <li><strong>Homeoffice:</strong> Falls möglich, stimme dich mit deiner Führungskraft ab, um Arbeitstage flexibel im Homeoffice zu planen.</li>
+  </ul>
+  <p>Für Rückfragen steht dir <em>Maximilian Bremer</em> (<a href="mailto:max.bremer@gmsh.de">max.bremer@gmsh.de</a>) aus der Facility‑Abteilung zur Verfügung. Er sammelt eure Ideen und leitet Verbesserungsmassnahmen ein.</p>
+  <p><strong>Warum diese Seite?</strong> Eine transparente Kommunikation über die Parksituation ermöglicht dir, frühzeitig Alternativen zu prüfen. So vermeiden wir Stress und schaffen einen entspannten Start in den Tag – ganz im Sinne einer mitarbeiterorientierten Infrastruktur.</p>
+  <p><a class="cta-button" href="aktuelles.html">Zurück zu den Meldungen<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12.293 4.293a1 1 0 0 1 1.414 0l7 7a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414-1.414L17.586 13H4a1 1 0 1 1 0-2h13.586l-5.293-5.293a1 1 0 0 1 0-1.414z"/></svg></a></p>
+</div>
+
+</div>
+<div class="hr-explanation"><h3>Hinweis für das Personalteam</h3><p>Der Beitrag zur Parksituation ist ein Beispiel für proaktive Kommunikation bei organisatorischen Themen.  Er zeigt, wie Anliegen frühzeitig aufgegriffen und Lösungen angeboten werden – ein Zeichen von Empathie und Serviceorientierung.</p></div></body>
+</html>
