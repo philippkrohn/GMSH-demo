@@ -3,206 +3,782 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GMSH Interne Kommunikation - Demo</title>
+    <title>Prototyp: Spiel-unterstütztes Lernen & Kommunizieren</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        #render-target { width: 100%; height: 100%; cursor: grab; }
+        #render-target:grabbing { cursor: grabbing; }
+        .transition-all-smooth { transition: all 0.5s ease-in-out; }
+        .option-button { transition: background-color 0.3s, transform 0.2s; }
+        .option-button:hover { transform: translateY(-2px); background-color: #e0f2fe; }
+        .option-button.correct { background-color: #dcfce7; border-color: #22c55e; }
+        .option-button.incorrect { background-color: #fee2e2; border-color: #ef4444; }
+        .progress-dot.completed { background-color: #0ea5e9; border-color: #0284c7; }
+        .contact-card { transition: all 0.2s ease-in-out; position: relative; }
+        .contact-card:hover { transform: scale(1.05); border-color: #38bdf8; }
+        .contact-feedback { position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; transform: scale(0); transition: transform 0.3s ease-in-out; }
+        .contact-feedback.show { transform: scale(1); }
+        #completion-screen, #akten-detektiv-modal, #vergabe-challenge-modal, #dialog-simulator-modal { opacity: 0; visibility: hidden; transition: opacity 0.3s ease-in-out; pointer-events: none; }
+        #completion-screen.active, #akten-detektiv-modal.active, #vergabe-challenge-modal.active, #dialog-simulator-modal.active { opacity: 1; visibility: visible; pointer-events: all; }
+    </style>
 </head>
-<body>
-    <!-- Skip Link for Accessibility -->
-    <a href="#main-content" class="skip-link">Zum Hauptinhalt springen</a>
-    
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span class="logo-text">GMSH</span>
+<body class="bg-gray-100">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Portfolio: Moderne Interne Kommunikation</h1>
+            <p class="text-lg text-gray-600">Ein Showcase interaktiver Formate für die GMSH.</p>
+            <p class="mt-4 max-w-3xl mx-auto text-gray-500">Diese Webseite demonstriert, wie ein strategischer Mix aus verschiedenen Medien – von interaktiven Lernmodulen über Podcasts bis hin zu Videocasts – die interne Kommunikation bereichern kann. Ziel ist es, Wissen effektiver zu vermitteln, den Dialog zu fördern und das Gemeinschaftsgefühl zu stärken.</p>
+        </div>
+    </header>
+
+    <!-- Podcast Section -->
+    <section class="container mx-auto px-6 pt-16">
+         <div class="text-left pb-8 max-w-3xl">
+            <h2 class="text-3xl font-bold text-gray-800">1. Wissen aufnehmen: Auditive Formate</h2>
+            <p class="mt-2 text-gray-600">Podcasts sind ein ideales Medium, um eine breite Zielgruppe flexibel zu erreichen. Angekündigt über das <span class="font-semibold text-sky-700">Intranet</span> und den <span class="font-semibold text-sky-700">Newsletter</span>, können Mitarbeitende Inhalte auf dem Arbeitsweg oder nebenbei konsumieren. Die Beispiel-Episode gibt eine allgemeine Einführung in die Landesbauordnung und schafft so eine gemeinsame Wissensbasis für alle Abteilungen.</p>
+        </div>
+        <div class="bg-sky-700 text-white p-8 rounded-lg shadow-2xl flex flex-col md:flex-row items-center gap-8">
+            <div class="flex-shrink-0">
+                <div class="w-40 h-40 bg-sky-600 rounded-lg flex items-center justify-center shadow-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-sky-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                </div>
             </div>
-            <ul class="nav-menu" id="nav-menu">
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link active">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="newsletter/index.html" class="nav-link">Newsletter</a>
-                </li>
-                <li class="nav-item">
-                    <a href="intranet/index.html" class="nav-link">Intranet</a>
-                </li>
-                <li class="nav-item">
-                    <a href="case-study/index.html" class="nav-link">Fallstudie</a>
-                </li>
-                <li class="nav-item">
-                    <a href="intro/index.html" class="nav-link">Video</a>
-                </li>
-            </ul>
-            <div class="hamburger" id="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+            <div class="flex-grow">
+                <h2 class="text-3xl font-bold mb-2">Neues Format: Der hausinterne Podcast "GM-Cast"</h2>
+                <p class="text-sky-200 mb-4">Wissen für die Ohren: Komplexe Themen verständlich aufbereitet und jederzeit verfügbar.</p>
+                <div class="bg-white text-gray-800 p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold">Beispiel-Episode: Landesbauordnung Kompakt</h3>
+                    <p class="text-sm text-gray-600 mb-3">Eine 25-minütige Einführung, um Mitarbeiter aus verschiedensten Abteilungen auf einen gemeinsamen Nenner zu bringen.</p>
+                    <audio controls class="w-full" preload="metadata">
+                        <!-- HINWEIS: Ersetzen Sie die 'src' unten mit Ihrem Dateinamen, z.B. "./Schleswig-Holsteins_Bauregeln_2024[...].m4a" -->
+                        <source src="https://storage.googleapis.com/media-session/sintel/snow-fight.mp3" type="audio/mpeg">
+                        Ihr Browser unterstützt das Audio-Element nicht.
+                    </audio>
+                </div>
+                <div class="mt-4">
+                    <h4 class="font-bold text-sky-100">Weitere Anwendungsfelder:</h4>
+                    <ul class="list-disc list-inside text-sky-200 text-sm mt-2 space-y-1">
+                        <li>Die Hintergründe einer wichtigen strategischen Entscheidung erklären.</li>
+                        <li>Eine neue Software oder einen neuen Prozess vorstellen.</li>
+                        <li>Aktualisierungen von Verordnungen oder Richtlinien verständlich machen.</li>
+                        <li>Interviews mit Kollegen oder der Geschäftsführung führen.</li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </nav>
+    </section>
 
-    <!-- Main Content -->
-    <main id="main-content">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-background"></div>
-            <div class="container">
-                <div class="hero-content fade-in">
-                    <h1 class="hero-title">Interne Kommunikation beim GMSH</h1>
-                    <p class="hero-subtitle">Diese interaktive Demo zeigt Ihnen anhand verschiedener Formate, wie interne Kommunikation beim GMSH echten Mehrwert stiften kann. Statt technischer Spielerei werden hier konkrete Beispiele präsentiert: ein Newsletter, der informiert und zur Teilnahme einlädt; ein Intranet, das Wissen bündelt und Zusammenarbeit fördert; eine Video-Serie, die Menschen vorstellt und Geschichten erzählt.</p>
-                    <p class="hero-description">Sie sehen hier, wie transparente Kommunikation Brücken baut: Informationen werden zielgruppengerecht aufbereitet, Feedback wird integriert und Mitarbeitende werden ermutigt, sich einzubringen.</p>
-                    <p class="hero-description">Als Bewerber bringe ich meine Erfahrung in Employer Branding, Content-Konzeption und Medienproduktion mit ein, um gemeinsam mit Ihnen eine lebendige, empathische Kommunikationskultur zu schaffen.</p>
+    <!-- Videocast Section -->
+    <section class="container mx-auto px-6 pt-16">
+        <div class="text-left pb-8 max-w-3xl">
+            <h2 class="text-3xl font-bold text-gray-800">2. Wissen vertiefen: Visuelle Formate</h2>
+            <p class="mt-2 text-gray-600">Videocasts ergänzen auditive Inhalte perfekt, indem sie visuelle Lerner ansprechen. Eingebettet in die <span class="font-semibold text-sky-700">digitale Mitarbeiterzeitung</span> oder verlinkt im <span class="font-semibold text-sky-700">Newsletter</span>, können komplexe Sachverhalte wie die Änderungen in der Landesbauordnung durch Folien und Beispiele greifbarer gemacht werden. Dies fördert ein tieferes Verständnis.</p>
+        </div>
+        <div class="bg-gray-800 text-white p-8 rounded-lg shadow-2xl flex flex-col md:flex-row items-center gap-8">
+            <div class="flex-shrink-0">
+                <div class="w-40 h-40 bg-gray-700 rounded-lg flex items-center justify-center shadow-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                 </div>
             </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="features">
-            <div class="container">
-                <div class="features-grid">
-                    <div class="feature-card glass-card fade-in">
-                        <div class="feature-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                <polyline points="22,6 12,13 2,6"/>
-                            </svg>
-                        </div>
-                        <h3 class="feature-title">Newsletter</h3>
-                        <p class="feature-description">Informiert und lädt zur Teilnahme ein</p>
-                    </div>
-                    
-                    <div class="feature-card glass-card fade-in">
-                        <div class="feature-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                                <line x1="8" y1="21" x2="16" y2="21"/>
-                                <line x1="12" y1="17" x2="12" y2="21"/>
-                            </svg>
-                        </div>
-                        <h3 class="feature-title">Intranet</h3>
-                        <p class="feature-description">Bündelt Wissen und fördert Zusammenarbeit</p>
-                    </div>
-                    
-                    <div class="feature-card glass-card fade-in">
-                        <div class="feature-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="23 7 16 12 23 17 23 7"/>
-                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-                            </svg>
-                        </div>
-                        <h3 class="feature-title">Video-Formate</h3>
-                        <p class="feature-description">Stellt Menschen vor und erzählt Geschichten</p>
-                    </div>
+            <div class="flex-grow">
+                <h2 class="text-3xl font-bold mb-2">Neues Format: Der "GM-Videocast"</h2>
+                <p class="text-gray-300 mb-4">Visuelle Aufbereitung: Komplexe Sachverhalte durch Präsentationen und Experten-Interviews greifbar machen.</p>
+                <div class="bg-white text-gray-800 p-4 rounded-lg shadow-md">
+                    <h3 class="font-bold">Beispiel-Episode: Die neue LBO visuell erklärt</h3>
+                    <p class="text-sm text-gray-600 mb-3">Ein kurzes Video, das die wichtigsten Änderungen der Landesbauordnung mit Folien und Beispielen illustriert.</p>
+                    <video controls class="w-full rounded" preload="metadata">
+                         <!-- HINWEIS: Ersetzen Sie die 'src' unten mit Ihrem Dateinamen, z.B. "./Neue_LBO_Schleswig-Holstein.mp4" -->
+                        <source src="https://storage.googleapis.com/media-session/sintel/trailer.mp4" type="video/mp4">
+                        Ihr Browser unterstützt das Video-Element nicht.
+                    </video>
+                </div>
+                <div class="mt-4">
+                    <h4 class="font-bold text-gray-200">Weitere Anwendungsfelder:</h4>
+                    <ul class="list-disc list-inside text-gray-300 text-sm mt-2 space-y-1">
+                        <li>Schulungsvideos für neue Software (Screen-Recordings).</li>
+                        <li>Projektvorstellungen und virtuelle Baustellenbegehungen.</li>
+                        <li>Botschaften der Geschäftsführung, um Nähe und Transparenz zu schaffen.</li>
+                    </ul>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Process Section -->
-        <section class="process">
-            <div class="container">
-                <h2 class="section-title fade-in">So arbeite ich</h2>
-                <div class="process-grid">
-                    <div class="process-step glass-card fade-in">
-                        <div class="step-number">1</div>
-                        <h3 class="step-title">Analyse</h3>
-                        <p class="step-description">Verstehen der Zielgruppen, Bedürfnisse und bestehenden Kommunikationsstrukturen</p>
+    <!-- Transition Section -->
+    <section class="container mx-auto px-6 pt-16">
+        <div class="text-center py-8">
+            <h2 class="text-3xl font-bold text-gray-800">3. Vom Wissen zum Handeln: Interaktive Anwendung</h2>
+            <p class="mt-2 max-w-3xl mx-auto text-gray-600">Echtes Lernen findet statt, wenn Wissen aktiv angewendet wird. Nachdem die Grundlagen passiv aufgenommen wurden, schlagen die folgenden spiel-gestützten Module die Brücke zur Praxis. Sie können als "Call to Action" im <span class="font-semibold text-sky-700">Intranet</span> oder <span class="font-semibold text-sky-700">Newsletter</span> platziert werden, um zur Teilnahme zu motivieren. Die Demos bieten einen sicheren Raum, um Entscheidungen zu treffen, deren Konsequenzen direkt zu erleben und so das Gelernte nachhaltig zu verankern.</p>
+        </div>
+    </section>
+
+    <!-- Instructions Section -->
+    <section class="container mx-auto px-6">
+        <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Interaktives Modul: So funktioniert die Demo</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div class="flex flex-col items-center">
+                    <div class="bg-sky-100 p-4 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
                     </div>
-                    
-                    <div class="process-step glass-card fade-in">
-                        <div class="step-number">2</div>
-                        <h3 class="step-title">Umsetzung</h3>
-                        <p class="step-description">Entwicklung zielgruppengerechter Formate und Inhalte mit klarem Mehrwert</p>
+                    <h3 class="font-bold text-lg mt-4">1. Wissen anwenden</h3>
+                    <p class="text-gray-600 text-sm mt-1">Beantworten Sie die Multiple-Choice-Fragen zur fiktiven Bauverordnung.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="bg-sky-100 p-4 rounded-full">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z" /></svg>
                     </div>
-                    
-                    <div class="process-step glass-card fade-in">
-                        <div class="step-number">3</div>
-                        <h3 class="step-title">Messung</h3>
-                        <p class="step-description">Kontinuierliche Erfolgsmessung durch KPIs und Feedback-Integration</p>
+                    <h3 class="font-bold text-lg mt-4">2. Fortschritt erleben</h3>
+                    <p class="text-gray-600 text-sm mt-1">Mit jeder korrekten Antwort wächst das 3D-Modell des Rathauses in der nächsten Bauphase.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="bg-sky-100 p-4 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                     </div>
+                    <h3 class="font-bold text-lg mt-4">3. Kollegialen Rat einholen</h3>
+                    <p class="text-gray-600 text-sm mt-1">Wählen Sie für jede Frage den passenden fiktiven Ansprechpartner aus und erhalten Sie direktes Feedback.</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="bg-sky-100 p-4 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 0h-4m4 0l-5-5" /></svg>
+                    </div>
+                    <h3 class="font-bold text-lg mt-4">4. Perspektive wechseln</h3>
+                    <p class="text-gray-600 text-sm mt-1">Klicken und ziehen Sie im Hauptfenster, um das 3D-Modell des Rathauses zu drehen.</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Demo Components Section -->
-        <section class="demo-components">
-            <div class="container">
-                <h2 class="section-title fade-in">Demo-Bausteine</h2>
-                <div class="components-grid">
-                    <a href="newsletter/index.html" class="component-card glass-card fade-in">
-                        <div class="component-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                <polyline points="22,6 12,13 2,6"/>
-                            </svg>
-                        </div>
-                        <h3 class="component-title">Newsletter</h3>
-                        <p class="component-description">Beispiele für zielgruppengerechte Newsletter-Inhalte</p>
-                    </a>
-                    
-                    <a href="intranet/index.html" class="component-card glass-card fade-in">
-                        <div class="component-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                                <line x1="8" y1="21" x2="16" y2="21"/>
-                                <line x1="12" y1="17" x2="12" y2="21"/>
-                            </svg>
-                        </div>
-                        <h3 class="component-title">Intranet</h3>
-                        <p class="component-description">Strukturierte Informationsarchitektur für bessere Zusammenarbeit</p>
-                    </a>
-                    
-                    <a href="case-study/index.html" class="component-card glass-card fade-in">
-                        <div class="component-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14,2 14,8 20,8"/>
-                                <line x1="16" y1="13" x2="8" y2="13"/>
-                                <line x1="16" y1="17" x2="8" y2="17"/>
-                                <polyline points="10,9 9,9 8,9"/>
-                            </svg>
-                        </div>
-                        <h3 class="component-title">Fallstudie</h3>
-                        <p class="component-description">Konkrete Projektbeispiele und Lessons Learned</p>
-                    </a>
-                    
-                    <a href="intro/index.html" class="component-card glass-card fade-in">
-                        <div class="component-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="23 7 16 12 23 17 23 7"/>
-                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-                            </svg>
-                        </div>
-                        <h3 class="component-title">Intro-Video</h3>
-                        <p class="component-description">Persönliche Vorstellung und Kommunikationsansatz</p>
-                    </a>
+    <!-- Main Demo Section -->
+    <main class="w-full h-[85vh] md:h-screen max-h-[900px] flex flex-col md:flex-row my-8 shadow-2xl rounded-lg overflow-hidden container mx-auto">
+        <div id="main-content" class="flex-1 flex flex-col p-4 md:p-8 bg-sky-50 overflow-hidden transition-all-smooth">
+            <header class="mb-4">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Projekt Rathaus Kiel: Interaktiv zur neuen Bauverordnung</h1>
+                <p class="text-gray-600">Ihr Fachwissen <span class="font-semibold text-sky-700">gestaltet die Zukunft Kiels.</span></p>
+            </header>
+            <div class="w-full bg-gray-200 rounded-full h-4 mb-6 relative overflow-hidden">
+                <div id="progress-bar" class="bg-sky-600 h-4 rounded-full transition-all-smooth" style="width: 5%;"></div>
+                <div class="absolute inset-0 flex justify-around items-center">
+                    <div id="progress-dot-0" class="progress-dot w-3 h-3 bg-white rounded-full border-2 border-gray-300"></div>
+                    <div id="progress-dot-1" class="progress-dot w-3 h-3 bg-white rounded-full border-2 border-gray-300"></div>
+                    <div id="progress-dot-2" class="progress-dot w-3 h-3 bg-white rounded-full border-2 border-gray-300"></div>
+                    <div id="progress-dot-3" class="progress-dot w-3 h-3 bg-white rounded-full border-2 border-gray-300"></div>
+                    <div id="progress-dot-4" class="progress-dot w-3 h-3 bg-white rounded-full border-2 border-gray-300"></div>
+                    <div id="progress-dot-5" class="progress-dot w-3 h-3 bg-white rounded-full border-2 border-gray-300"></div>
+                    <div id="progress-dot-6" class="progress-dot w-3 h-3 bg-white rounded-full border-2 border-gray-300"></div>
                 </div>
             </div>
-        </section>
-
-        <!-- HR Callout -->
-        <section class="hr-callout">
-            <div class="container">
-                <div class="callout-card glass-card fade-in">
-                    <div class="callout-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                            <path d="M12 17h.01"/>
-                        </svg>
-                    </div>
-                    <div class="callout-content">
-                        <h3 class="callout-title">Für HR-Entscheider</h3>
-                        <p class="callout-text">Diese Demo zeigt konkrete Ansätze für eine moderne, empathische Kommunikationskultur. Jedes Format wurde mit Blick auf Mitarbeiterbindung und -engagement entwickelt.</p>
+            <main id="render-target-container" class="flex-1 bg-white rounded-2xl shadow-lg relative overflow-hidden">
+                <div id="render-target"></div>
+                <div id="completion-screen" class="absolute inset-0 bg-sky-800 bg-opacity-90 text-white flex flex-col justify-center items-center text-center p-8">
+                    <h2 class="text-4xl font-bold mb-4">Herzlichen Glückwunsch!</h2>
+                    <p class="text-xl mb-8">Das neue Rathaus für Kiel ist fertiggestellt. Ein voller Erfolg!</p>
+                    <div class="space-y-4 w-full max-w-sm">
+                         <button class="w-full bg-sky-500 hover:bg-sky-400 text-white font-bold py-3 px-6 rounded-lg text-lg">Nächste Lektion starten</button>
+                         <button onclick="window.location.reload()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg text-lg">Zurück zum Start</button>
+                         <div class="text-center pt-6 text-sm">
+                            <h3 class="font-bold text-lg mb-2">Hatten Sie Fragen?</h3>
+                            <p>Ihre Ansprechpartner: Fr. Meier (Baurecht), Hr. Schmidt (Digitalisierung)</p>
+                            <h3 class="font-bold text-lg mt-4 mb-2">Haben Sie Feedback?</h3>
+                            <p>Kontaktieren Sie das IK-Team zur Verbesserung des Programms.</p>
+                        </div>
                     </div>
                 </div>
+            </main>
+        </div>
+
+        <aside id="quiz-sidebar" class="w-full md:w-1/3 max-w-lg bg-white shadow-2xl p-8 flex flex-col h-full md:h-auto overflow-y-auto transition-all-smooth">
+            <div id="quiz-container" class="flex flex-col h-full">
+                <div class="flex-grow">
+                    <h2 id="phase-title" class="text-xl font-bold text-gray-800 mb-2"></h2>
+                    <div class="h-1 w-20 bg-sky-600 rounded-full mb-6"></div>
+                    <p id="question-text" class="text-gray-700 text-lg mb-6"></p>
+                    <a id="regulation-link" href="#" target="_blank" class="text-sky-600 hover:underline text-sm mb-8 block"></a>
+                    <div id="options-container" class="space-y-4"></div>
+                </div>
+                <div id="social-component" class="mt-8 border-t-2 pt-6">
+                     <h3 class="font-bold text-gray-700 mb-3">Wen fragen Sie um Rat?</h3>
+                     <div id="contacts-container" class="grid grid-cols-2 gap-3"></div>
+                </div>
+                <div id="feedback-box" class="mt-auto p-4 border-l-4 rounded-r-lg" style="display: none;">
+                    <h3 id="feedback-title" class="font-bold"></h3>
+                    <p id="feedback-text" class="mt-2"></p>
+                    <button id="retry-button" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-lg transition-colors">Erneut versuchen</button>
+                </div>
+                <div id="next-question-container" class="mt-auto" style="display: none;">
+                     <div class="p-4 bg-green-50 border-l-4 border-green-500 rounded-r-lg">
+                        <h3 class="font-bold text-green-800">Sehr gut!</h3>
+                        <p id="success-text" class="text-green-700 mt-2"></p>
+                    </div>
+                    <button id="next-question-button" class="mt-4 w-full bg-sky-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-sky-700 transition-colors shadow-md">Nächste Bauphase starten</button>
+                </div>
             </div>
-        </section>
+        </aside>
     </main>
 
-    <script src="assets/js/app.js"></script>
+    <!-- Other Concepts Section -->
+    <section class="bg-gray-50 py-16">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Weitere interaktive Konzepte</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Concept 1: Akten-Detektiv -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+                    <div class="w-full h-48 bg-gray-700 rounded-md mb-4 flex flex-col text-xs text-white overflow-hidden">
+                        <div class="bg-gray-800 px-2 py-1 flex items-center">
+                            <span class="w-3 h-3 bg-red-500 rounded-full inline-block mr-1"></span>
+                            <span class="w-3 h-3 bg-yellow-500 rounded-full inline-block mr-1"></span>
+                            <span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span>
+                            <span class="flex-grow text-center text-gray-400">Fallakte: Windkraftanlage Musterdorf</span>
+                        </div>
+                        <div class="flex flex-grow p-2">
+                            <div class="w-1/3 border-r border-gray-600 pr-2">
+                                <p class="font-bold mb-1">E-Mails</p>
+                                <p class="bg-sky-700 rounded p-1 mb-1">Anfrage Bürger</p>
+                                <p class="p-1">Antwort Bauamt</p>
+                                <p class="font-bold mt-2 mb-1">Archiv</p>
+                                <p class="p-1">Bauantrag_v1.pdf</p>
+                                <p class="p-1">Gutachten_final.pdf</p>
+                            </div>
+                            <div class="w-2/3 pl-2">
+                                <p class="font-bold">Von: a.buerger@mail.com</p>
+                                <p class="text-gray-400">Betreff: Warum wurde...</p>
+                                <p class="mt-2">Sehr geehrte Damen und Herren, ... <span class="bg-yellow-400 text-black">gemäß §15 Abs. 2 NBauVO</span> ... wurde der Antrag abgelehnt...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Der Akten-Detektiv</h3>
+                    <p class="text-gray-600 flex-grow">Ein Point-and-Click-Adventure, in dem Nutzer einen "Fall" lösen, indem sie in einer simulierten Umgebung die richtigen digitalen Dokumente finden und Paragraphen korrekt anwenden. Ideal zum Training von Prozessabläufen.</p>
+                    <button id="start-akten-detektiv" class="mt-4 bg-sky-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-sky-700 transition-colors w-full">Demo starten</button>
+                </div>
+
+                <!-- Concept 2: Vergabe-Challenge -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+                    <div class="w-full h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center p-4">
+                        <div class="w-full bg-white p-2 rounded shadow-md">
+                            <div class="flex justify-between text-xs font-bold text-gray-700"><span>Firma A</span> <span class="text-green-600">€€</span></div>
+                            <div class="w-full bg-gray-300 rounded-full h-2 mt-1"><div class="bg-green-500 h-2 rounded-full" style="width: 70%"></div></div>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Die Vergabe-Challenge</h3>
+                    <p class="text-gray-600 flex-grow">Ein Management-Spiel, bei dem mit Budget- und Zeitdruck die Vergabe für ein Projekt entschieden werden muss. Angebote müssen nach Preis, Qualität und Vergaberecht bewertet werden, um das beste Ergebnis zu erzielen.</p>
+                     <button id="start-vergabe-challenge" class="mt-4 bg-sky-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-sky-700 transition-colors w-full">Demo starten</button>
+                </div>
+
+                <!-- Concept 3: Dialog-Simulator -->
+                <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+                     <div class="w-full h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center p-4">
+                        <div class="w-full bg-white p-2 rounded shadow-md text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                            <p class="text-sm text-gray-600 mt-2">"Das ist doch Willkür!"</p>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Der Dialog-Simulator</h3>
+                    <p class="text-gray-600 flex-grow">Ein interaktives Gesprächs-Szenario, in dem Nutzer durch Multiple-Choice-Antworten den Dialog mit Bürgern oder Politikern steuern. Ziel ist es, rechtssicher zu argumentieren und konstruktive Lösungen zu finden.</p>
+                    <button id="start-dialog-simulator" class="mt-4 bg-sky-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-sky-700 transition-colors w-full">Demo starten</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div id="akten-detektiv-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full flex flex-col" style="height: 90vh; max-height: 700px;">
+            <div class="p-4 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-gray-800">Demo: Der Akten-Detektiv</h2><button id="close-akten-detektiv" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button></div>
+            <div class="p-6 flex-grow overflow-y-auto"><div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded-r-lg"><h3 class="font-bold">Ihr Auftrag</h3><p>Ein Bürger hat sich beschwert, dass der Bauantrag für eine Windkraftanlage in Musterdorf abgelehnt wurde. Finden Sie im simulierten Postfach und Archiv den entscheidenden Grund für die Ablehnung und markieren Sie den relevanten Paragraphen.</p></div><div class="w-full h-96 bg-gray-700 rounded-md flex flex-col text-sm text-white overflow-hidden"><div class="bg-gray-800 px-2 py-1 flex items-center"><span class="w-3 h-3 bg-red-500 rounded-full inline-block mr-1"></span><span class="w-3 h-3 bg-yellow-500 rounded-full inline-block mr-1"></span><span class="w-3 h-3 bg-green-500 rounded-full inline-block"></span><span class="flex-grow text-center text-gray-400">Fallakte: Windkraftanlage Musterdorf</span></div><div class="flex flex-grow p-4"><div class="w-1/3 border-r border-gray-600 pr-4"><h4 class="font-bold mb-2 text-lg">Posteingang</h4><div class="space-y-2"><p class="bg-sky-700 rounded p-2 cursor-pointer">Anfrage Bürger</p><p class="p-2 cursor-pointer hover:bg-gray-600 rounded">Antwort Bauamt</p></div><h4 class="font-bold mt-6 mb-2 text-lg">Archiv</h4><div class="space-y-2"><p class="p-2 cursor-pointer hover:bg-gray-600 rounded">Bauantrag_v1.pdf</p><p class="p-2 cursor-pointer hover:bg-gray-600 rounded">Gutachten_final.pdf</p></div></div><div class="w-2/3 pl-4"><p class="font-bold">Von: a.buerger@mail.com</p><p class="text-gray-400">Betreff: Warum wurde der Antrag für die Windkraftanlage abgelehnt?</p><hr class="my-2 border-gray-600"><p class="mt-2">Sehr geehrte Damen und Herren, <br><br> ich verstehe nicht, warum der Bauantrag abgelehnt wurde. Laut meiner Recherche ist doch <span class="bg-yellow-400 text-black p-1 rounded cursor-pointer" onclick="alert('Korrekt! Gemäß §15 Abs. 2 NBauVO ist der Abstand zur Wohnbebauung nicht ausreichend. Fall gelöst!')">gemäß §15 Abs. 2 NBauVO</span> alles in Ordnung. <br><br> Mit freundlichen Grüßen, <br> A. Bürger</p></div></div></div><div class="mt-6 pt-6 border-t"><h3 class="text-xl font-bold text-gray-800 mb-3">Pädagogischer Ansatz</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700"><div><h4 class="font-bold mb-2">Gelehrte Prinzipien:</h4><ul class="list-disc list-inside space-y-1"><li><strong>Prozessverständnis:</strong> Nachvollziehen von digitalen Arbeitsabläufen.</li><li><strong>Informationsbeschaffung:</strong> Effizientes Finden relevanter Daten.</li><li><strong>Rechtsanwendung:</strong> Korrekte Verknüpfung von Sachverhalt und Vorschrift.</li></ul></div><div><h4 class="font-bold mb-2">Vorteile als Ergänzung:</h4><ul class="list-disc list-inside space-y-1"><li><strong>Praxisnahe Simulation:</strong> Trainiert den Umgang mit Systemen in einer sicheren Umgebung.</li><li><strong>Fehlertoleranz:</strong> Fördert exploratives Lernen ohne reale Konsequenzen.</li><li><strong>Motivation:</strong> Der "Detektiv"-Aspekt steigert das Engagement.</li></ul></div></div></div></div>
+        </div>
+    </div>
+    
+    <div id="vergabe-challenge-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full flex flex-col" style="height: 90vh; max-height: 700px;">
+            <div class="p-4 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-gray-800">Demo: Die Vergabe-Challenge</h2><button id="close-vergabe-challenge" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button></div>
+            <div class="p-6 flex-grow overflow-y-auto"><div class="bg-sky-50 border-l-4 border-sky-500 text-sky-700 p-4 mb-6 rounded-r-lg"><h3 class="font-bold">Ihr Auftrag</h3><p>Wählen Sie das wirtschaftlichste Angebot für den Fassadenbau des Rathauses aus. Berücksichtigen Sie dabei alle Vorgaben.</p></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-center"><div class="bg-gray-100 p-3 rounded-lg"><p class="font-bold text-gray-700">Max. Budget</p><p class="text-2xl font-bold text-gray-900">1.5 Mio. €</p></div><div class="bg-gray-100 p-3 rounded-lg"><p class="font-bold text-gray-700">Max. Dauer</p><p class="text-2xl font-bold text-gray-900">90 Tage</p></div><div class="bg-gray-100 p-3 rounded-lg"><p class="font-bold text-gray-700">Min. Nachhaltigkeit</p><p class="text-2xl font-bold text-gray-900">75 / 100</p></div></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="border-2 p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer" onclick="alert('Gute Wahl! Dieses Angebot erfüllt alle Kriterien und ist das wirtschaftlichste. Auftrag vergeben!')"><h4 class="font-bold text-xl mb-2">Fassaden-Profis GmbH</h4><p><strong>Preis:</strong> <span class="text-green-600 font-bold">1.45 Mio. €</span></p><p><strong>Dauer:</strong> 85 Tage</p><p><strong>Nachhaltigkeit:</strong> 80 / 100</p><p><strong>Referenzen:</strong> Sehr gut</p></div><div class="border-2 p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer" onclick="alert('Achtung! Der Preis ist verlockend, aber die Nachhaltigkeits-Anforderungen werden nicht erfüllt. Ablehnung wegen Nichterfüllung der Kriterien.')"><h4 class="font-bold text-xl mb-2">Billig-Bau KG</h4><p><strong>Preis:</strong> <span class="text-red-600 font-bold">1.2 Mio. €</span></p><p><strong>Dauer:</strong> 110 Tage</p><p><strong>Nachhaltigkeit:</strong> 60 / 100</p><p><strong>Referenzen:</strong> Ausreichend</p></div><div class="border-2 p-4 rounded-lg hover:shadow-lg transition-shadow cursor-pointer" onclick="alert('Angebot geprüft. Zwar sind Qualität und Nachhaltigkeit exzellent, aber das Budget wird deutlich überschritten. Das Angebot muss leider ausgeschlossen werden.')"><h4 class="font-bold text-xl mb-2">Premium Fassaden AG</h4><p><strong>Preis:</strong> 1.8 Mio. €</p><p><strong>Dauer:</strong> 75 Tage</p><p><strong>Nachhaltigkeit:</strong> 95 / 100</p><p><strong>Referenzen:</strong> Exzellent</p></div></div><div class="mt-6 pt-6 border-t"><h3 class="text-xl font-bold text-gray-800 mb-3">Pädagogischer Ansatz</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700"><div><h4 class="font-bold mb-2">Gelehrte Prinzipien:</h4><ul class="list-disc list-inside space-y-1"><li><strong>Wirtschaftlichkeitsprüfung:</strong> Abwägen von Kosten, Qualität und Nachhaltigkeit.</li><li><strong>Vergaberecht:</strong> Anwendung rechtlicher Rahmenbedingungen.</li><li><strong>Risikomanagement:</strong> Erkennen von Risiken in Angeboten.</li></ul></div><div><h4 class="font-bold mb-2">Vorteile als Ergänzung:</h4><ul class="list-disc list-inside space-y-1"><li><strong>Entscheidungstraining:</strong> Fördert das Treffen komplexer Entscheidungen unter Druck.</li><li><strong>Konsequenzen erleben:</strong> Macht die Auswirkungen von Entscheidungen direkt sichtbar.</li><li><strong>Wettbewerbscharakter:</strong> Motiviert, das bestmögliche Ergebnis zu erzielen.</li></ul></div></div></div></div>
+        </div>
+    </div>
+
+    <div id="dialog-simulator-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full flex flex-col" style="height: 90vh; max-height: 700px;">
+            <div class="p-4 border-b flex justify-between items-center"><h2 class="text-2xl font-bold text-gray-800">Demo: Der Dialog-Simulator</h2><button id="close-dialog-simulator" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button></div>
+            <div class="p-6 flex-grow overflow-y-auto"><div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-r-lg"><h3 class="font-bold">Szenario</h3><p>Ein aufgebrachter Anwohner beschwert sich über Baulärm. Wie reagieren Sie?</p></div><div class="bg-gray-100 p-4 rounded-lg"><div class="flex items-start space-x-4"><div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center font-bold text-2xl text-gray-600">?</div><div id="dialog-text" class="flex-1 bg-white p-4 rounded-lg shadow">"Der Lärm von Ihrer Baustelle ist unerträglich! Das geht schon seit Wochen so, ich kann nicht mehr arbeiten! Das ist doch reine Willkür!"</div></div><div id="dialog-options" class="mt-4 grid grid-cols-1 gap-3"><button class="text-left p-3 bg-white border-2 rounded-lg hover:bg-sky-50" onclick="updateDialog(this, 'deescalating')">"Ich verstehe Ihren Ärger vollkommen. Lassen Sie uns gemeinsam nach einer Lösung suchen."</button><button class="text-left p-3 bg-white border-2 rounded-lg hover:bg-sky-50" onclick="updateDialog(this, 'factual')">"Wir halten uns an alle gesetzlichen Vorgaben, inklusive der Lärmschutzverordnung."</button><button class="text-left p-3 bg-white border-2 rounded-lg hover:bg-sky-50" onclick="updateDialog(this, 'dismissive')">"Da kann ich Ihnen auch nicht helfen, Beschwerden müssen schriftlich eingereicht werden."</button></div></div><div class="mt-6 pt-6 border-t"><h3 class="text-xl font-bold text-gray-800 mb-3">Pädagogischer Ansatz</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700"><div><h4 class="font-bold mb-2">Gelehrte Prinzipien:</h4><ul class="list-disc list-inside space-y-1"><li><strong>Kommunikationsfähigkeit:</strong> Aktives Zuhören und deeskalierendes Antworten.</li><li><strong>Rechtssicherheit:</strong> Souveräner Umgang mit Vorschriften im direkten Gespräch.</li><li><strong>Lösungsorientierung:</strong> Konstruktives Handeln in Konfliktsituationen.</li></ul></div><div><h4 class="font-bold mb-2">Vorteile als Ergänzung:</h4><ul class="list-disc list-inside space-y-1"><li><strong>Sicheres Übungsfeld:</strong> Trainiert "Soft Skills" für schwierige Gespräche ohne Risiko.</li><li><strong>Direktes Feedback:</strong> Zeigt unmittelbar die Wirkung unterschiedlicher Kommunikationsstile.</li><li><strong>Empathie-Förderung:</strong> Hilft, die Perspektive von Bürgern und Partnern besser zu verstehen.</li></ul></div></div></div></div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-white mt-8">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Warum dieser Medien-Mix?</h3>
+                    <p class="text-gray-600">Die Aufgabe der Internen Kommunikation ist es, sicherzustellen, dass Informationen nicht nur gesendet, sondern auch verstanden und akzeptiert werden. Ein einzelnes Format erreicht selten alle Mitarbeitenden gleich gut. Ein Mix aus interaktiven Modulen (für aktives Anwenden), Podcasts (für flexibles Lernen) und Videocasts (für visuelle Lerner) schafft vielfältige Zugänge zu Wissen und fördert eine engagierte Lernkultur.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Der Mehrwert für die Interne Kommunikation</h3>
+                    <p class="text-gray-600">Diese Tools sind mehr als nur Schulungen; sie sind Instrumente zur Kulturförderung. Sie machen Wissen zugänglich, fördern den kollegialen Austausch und zeigen Wertschätzung gegenüber den Mitarbeitenden. Als Ergänzung zu bestehenden Formaten wie <span class="font-semibold text-sky-700">Newsletter</span>, <span class="font-semibold text-sky-700">Intranet</span> und <span class="font-semibold text-sky-700">Mitarbeiterzeitung</span> ermöglichen sie es, Wissen in einem sicheren Raum praktisch anzuwenden und zu festigen. Dies stärkt die Problemlösungskompetenz und positioniert die GMSH als innovativen Arbeitgeber.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Ein Werkzeug für die IK</h3>
+                    <p class="text-gray-600">Dieser Prototyp zeigt, wie flexible Web-Technologien (<span class="font-semibold">HTML, CSS, Three.js</span>) genutzt werden können, um maßgeschneiderte Kommunikations- und Lernwerkzeuge zu erstellen. Solche Module können thematisch schnell angepasst und über das <span class="font-semibold text-sky-700">Intranet</span> für alle Mitarbeitenden leicht zugänglich gemacht werden, um die interne Wissensvermittlung nachhaltig zu verbessern.</p>
+                </div>
+            </div>
+            <div class="text-center mt-12 pt-8 border-t border-gray-200">
+                <p class="text-gray-600 mb-4">Ich hoffe, diese Demos konnten Ihnen einen Einblick geben, wie wir die Interne Kommunikation bei der GMSH gemeinsam modern, interaktiv und wirkungsvoll gestalten können.</p>
+                <a href="https://philippkrohn.github.io/GMSH-Kommunikation/" class="inline-block bg-sky-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-sky-700 transition-colors text-lg shadow-md">Zurück zur Übersicht</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Disclaimer -->
+    <div class="bg-gray-200 py-4">
+        <div class="container mx-auto px-6 text-center text-gray-600 text-xs">
+            <p><strong>Disclaimer:</strong> Dies ist eine interaktive Demo, die im Rahmen einer Bewerbung bei der GMSH erstellt wurde. Die dargestellten Inhalte (z.B. die "NBauVO SH 2026") sind fiktiv. Informationen stammen aus öffentlich zugänglichen Quellen. Sämtliche Personennamen sind Platzhalter.</p>
+        </div>
+    </div>
+    
+    <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js" } }</script>
+    <script type="module">
+        import * as THREE from 'three';
+
+        // --- 3D SCENE SETUP ---
+        let scene, camera, renderer, buildingGroup;
+        const renderTarget = document.getElementById('render-target');
+        const groundMat = new THREE.MeshLambertMaterial({ color: 0x86b049 });
+        const foundationMat = new THREE.MeshLambertMaterial({ color: 0xc7c7c7 });
+        const structureMat = new THREE.MeshLambertMaterial({ color: 0x555555 });
+        const wallMat = new THREE.MeshLambertMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
+        const glassMat = new THREE.MeshLambertMaterial({ color: 0xa7e1ff, transparent: true, opacity: 0.6 });
+        const roofMat = new THREE.MeshLambertMaterial({ color: 0x6a8c3a });
+        const highlightMat = new THREE.MeshLambertMaterial({ color: 0xffff00, emissive: 0xffff00 });
+        const buildingParts = {};
+
+        function init3D() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xa7e1ff);
+            scene.fog = new THREE.Fog(0xa7e1ff, 20, 50);
+            camera = new THREE.PerspectiveCamera(50, renderTarget.clientWidth / renderTarget.clientHeight, 0.1, 1000);
+            camera.position.set(10, 8, 10);
+            camera.lookAt(0, 0, 0);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(renderTarget.clientWidth, renderTarget.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderTarget.appendChild(renderer.domElement);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(-5, 10, 7.5);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            const groundGeo = new THREE.PlaneGeometry(30, 30);
+            const ground = new THREE.Mesh(groundGeo, groundMat);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            buildingGroup = new THREE.Group();
+            scene.add(buildingGroup);
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+            renderTarget.addEventListener('mousedown', e => { isDragging = true; renderTarget.style.cursor = 'grabbing'; });
+            renderTarget.addEventListener('mouseup', e => { isDragging = false; renderTarget.style.cursor = 'grab'; });
+            renderTarget.addEventListener('mousemove', e => {
+                if (!isDragging) return;
+                const deltaMove = { x: e.offsetX - previousMousePosition.x, y: e.offsetY - previousMousePosition.y };
+                buildingGroup.rotation.y += deltaMove.x * 0.005;
+                previousMousePosition = { x: e.offsetX, y: e.offsetY };
+            });
+            window.addEventListener('resize', () => {
+                camera.aspect = renderTarget.clientWidth / renderTarget.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(renderTarget.clientWidth, renderTarget.clientHeight);
+            });
+            animate();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        function addBuildingPart(phase) {
+            let geometry, mesh;
+            switch(phase) {
+                case 0: 
+                    geometry = new THREE.BoxGeometry(6, 0.5, 4);
+                    mesh = new THREE.Mesh(geometry, foundationMat);
+                    mesh.position.y = 0.25;
+                    buildingParts.foundation = mesh;
+                    break;
+                case 1:
+                    buildingParts.structure = new THREE.Group();
+                    for(let x = -2.5; x <= 2.5; x+=5) {
+                        for(let z = -1.5; z <= 1.5; z+=3) {
+                            geometry = new THREE.BoxGeometry(0.2, 5, 0.2);
+                            mesh = new THREE.Mesh(geometry, structureMat);
+                            mesh.position.set(x, 2.5, z);
+                            buildingParts.structure.add(mesh);
+                        }
+                    }
+                    mesh = buildingParts.structure;
+                    break;
+                case 2:
+                     buildingParts.walls = new THREE.Group();
+                     let wallGeo1 = new THREE.BoxGeometry(6, 5, 0.1);
+                     let wall1 = new THREE.Mesh(wallGeo1, wallMat);
+                     wall1.position.set(0, 2.5, 2);
+                     buildingParts.walls.add(wall1);
+                     let wall2 = new THREE.Mesh(wallGeo1, wallMat);
+                     wall2.position.set(0, 2.5, -2);
+                     buildingParts.walls.add(wall2);
+                     let wallGeo2 = new THREE.BoxGeometry(0.1, 5, 4);
+                     let wall3 = new THREE.Mesh(wallGeo2, wallMat);
+                     wall3.position.set(3, 2.5, 0);
+                     buildingParts.walls.add(wall3);
+                     let wall4 = new THREE.Mesh(wallGeo2, wallMat);
+                     wall4.position.set(-3, 2.5, 0);
+                     buildingParts.walls.add(wall4);
+                     mesh = buildingParts.walls;
+                    break;
+                case 3: 
+                    geometry = new THREE.BoxGeometry(6.2, 0.3, 4.2);
+                    mesh = new THREE.Mesh(geometry, roofMat);
+                    mesh.position.y = 5.15;
+                    buildingParts.roof = mesh;
+                    break;
+                case 4: 
+                    buildingParts.windows = new THREE.Group();
+                    let windowGeo = new THREE.BoxGeometry(1.5, 2, 0.15);
+                    let window1 = new THREE.Mesh(windowGeo, glassMat);
+                    window1.position.set(-1.5, 2.5, 2.06);
+                    buildingParts.windows.add(window1);
+                     let window2 = new THREE.Mesh(windowGeo, glassMat);
+                    window2.position.set(1.5, 2.5, 2.06);
+                    buildingParts.windows.add(window2);
+                    mesh = buildingParts.windows;
+                    break;
+                 case 5: 
+                    buildingParts.solar = new THREE.Group();
+                    let panelGeo = new THREE.BoxGeometry(1.5, 0.1, 2);
+                    for(let i=0; i<2; i++){
+                        let panel = new THREE.Mesh(panelGeo, new THREE.MeshLambertMaterial({color:0x111133}));
+                        panel.position.set(-1.5 + i*3, 5.3, -0.5);
+                        panel.rotation.x = -0.3;
+                        buildingParts.solar.add(panel);
+                    }
+                    mesh = buildingParts.solar;
+                    break;
+                 case 6: 
+                    buildingParts.final = new THREE.Group();
+                    const treeGeo = new THREE.ConeGeometry(0.5, 2, 8);
+                    const treeTrunkGeo = new THREE.CylinderGeometry(0.1, 0.1, 1);
+                    const treeMat = new THREE.MeshLambertMaterial({color: 0x22c55e});
+                    const trunkMat = new THREE.MeshLambertMaterial({color: 0x8B4513});
+                    let tree1 = new THREE.Group();
+                    let crown1 = new THREE.Mesh(treeGeo, treeMat);
+                    crown1.position.y = 1.5;
+                    let trunk1 = new THREE.Mesh(treeTrunkGeo, trunkMat);
+                    trunk1.position.y = 0.5;
+                    tree1.add(crown1, trunk1);
+                    tree1.position.set(5, 0, 3);
+                    buildingParts.final.add(tree1);
+                    mesh = buildingParts.final;
+                    break;
+            }
+
+            if (mesh) {
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                mesh.scale.set(0,0,0);
+                buildingGroup.add(mesh);
+                let scale = { x: 0, y: 0, z: 0 };
+                let targetScale = { x: 1, y: 1, z: 1 };
+                function animateScale() {
+                    scale.x += (targetScale.x - scale.x) * 0.1;
+                    scale.y += (targetScale.y - scale.y) * 0.1;
+                    scale.z += (targetScale.z - scale.z) * 0.1;
+                    mesh.scale.set(scale.x, scale.y, scale.z);
+                    if (Math.abs(targetScale.x - scale.x) > 0.01) {
+                        requestAnimationFrame(animateScale);
+                    }
+                }
+                animateScale();
+            }
+        }
+        
+        // --- QUIZ LOGIC ---
+        const contacts = [
+            { id: 0, name: 'Fr. Meier', dept: 'Baurecht', avatar: 'https://placehold.co/100x100/a7e1ff/333?text=FM' },
+            { id: 1, name: 'Hr. Schmidt', dept: 'Digitalisierung', avatar: 'https://placehold.co/100x100/d2b48c/333?text=HS' },
+            { id: 2, name: 'Fr. Weber', dept: 'Nachhaltigkeit', avatar: 'https://placehold.co/100x100/86b049/333?text=FW' },
+            { id: 3, name: 'Hr. Bauer', dept: 'Tiefbau', avatar: 'https://placehold.co/100x100/c7c7c7/333?text=HB' },
+            { id: 4, name: 'Hr. Neumann', dept: 'Vergabe', avatar: 'https://placehold.co/100x100/f9a602/333?text=HN' },
+            { id: 5, name: 'Fr. Roth', dept: 'Bürgerbeteiligung', avatar: 'https://placehold.co/100x100/e0e0e0/333?text=FR' }
+        ];
+        const quizData = [
+             {
+                phase: "Phase 1: Bedarfsplanung & Grundlagen",
+                question: "Die \"NBauVO SH 2026\" legt in §3 einen neuen Fokus auf Bürgerbeteiligung. Welches Verfahren ist nun zwingend vorgeschrieben?",
+                regulationLink: "Siehe NBauVO SH 2026, §3 Abs. 2",
+                options: [{ text: "Eine einmalige Informationsveranstaltung.", highlightId: null },{ text: "Eine mehrstufige digitale Bürgerbefragung.", highlightId: null },{ text: "Ein Aushang der Pläne im alten Rathaus.", highlightId: null }],
+                correctAnswer: 1,
+                hint: "Denken Sie an moderne, digitale Möglichkeiten, um eine breite Öffentlichkeit transparent einzubinden.",
+                successText: "Die Planung ist genehmigt! Das Fundament für die Bürgerbeteiligung ist gelegt.",
+                relevantContacts: { correct: 5, incorrect: 0 },
+                failAnimation: () => { buildingGroup.rotation.z = Math.sin(Date.now()*0.01)*0.1; setTimeout(()=>buildingGroup.rotation.z = 0, 1000)}
+            },
+            {
+                phase: "Phase 2: Entwurfsplanung & Baugenehmigung",
+                question: "Laut §15 müssen Bauanträge digital eingereicht werden. Welches Dateiformat ist für die finalen Baupläne als einziges zulässig?",
+                regulationLink: "Siehe NBauVO SH 2026, §15 Abs. 4a",
+                options: [{ text: "PDF/A-Format.", highlightId: null },{ text: "IFC für BIM-Modelle.", highlightId: 'foundation' },{ text: "Gescannte Papierpläne.", highlightId: null }],
+                correctAnswer: 1,
+                hint: "Welches Format ermöglicht die verlustfreie Zusammenarbeit an einem 3D-Gebäudemodell?",
+                successText: "Der Bauantrag ist durch! Die Bagger können rollen.",
+                relevantContacts: { correct: 1, incorrect: 3 }
+            },
+            {
+                phase: "Phase 3: Ausschreibung & Vergabe",
+                question: "§22 fordert eine Nachhaltigkeitsquote. Welcher Mindestanteil an Baumaterialien muss aus recycelten Quellen stammen?",
+                regulationLink: "Siehe NBauVO SH 2026, §22 Abs. 1",
+                options: [{ text: "15%", highlightId: null },{ text: "30%", highlightId: null },{ text: "Es gibt keine feste Quote.", highlightId: null }],
+                correctAnswer: 1,
+                hint: "Die neue Verordnung setzt ein ambitioniertes Ziel, um die Kreislaufwirtschaft zu fördern.",
+                successText: "Die Baufirmen sind beauftragt. Der Kran wird aufgestellt!",
+                relevantContacts: { correct: 2, incorrect: 4 }
+            },
+            {
+                phase: "Phase 4: Grundsteinlegung & Erdarbeiten",
+                question: "§8 verschärft die Regeln zum Bodenschutz. Welche Maßnahme ist VOR dem Gießen des Fundaments zwingend?",
+                regulationLink: "Siehe NBauVO SH 2026, §8 Abs. 3",
+                options: [{ text: "Eine archäologische Sondierungsgrabung.", highlightId: null },{ text: "Ein hydrogeologisches Gutachten.", highlightId: null },{ text: "Das Aufstellen eines Lärmschutzwalls.", highlightId: null }],
+                correctAnswer: 1,
+                hint: "Die Wechselwirkung mit dem Grundwasser muss genau untersucht werden.",
+                successText: "Das Fundament ist solide! Der Rohbau kann beginnen.",
+                relevantContacts: { correct: 3, incorrect: 5 }
+            },
+            {
+                phase: "Phase 5: Rohbau",
+                question: "§35 \"Energieeffizienz\" schreibt den KfW-40-Standard vor. Welches Bauteil ist dafür am entscheidendsten?",
+                regulationLink: "Siehe NBauVO SH 2026, §35 Abs. 1a",
+                options: [{ text: "3-fach verglaste Fenster.", highlightId: 'windows' },{ text: "Eine Photovoltaik-Anlage.", highlightId: 'solar' },{ text: "Ein Blockheizkraftwerk.", highlightId: 'foundation' }],
+                correctAnswer: 0,
+                hint: "Die meiste Energie geht über die Außenhülle eines Gebäudes verloren.",
+                successText: "Der Rohbau steht! Jetzt kommt die Fassade.",
+                relevantContacts: { correct: 2, incorrect: 1 }
+            },
+            {
+                phase: "Phase 6: Innenausbau & Fassade",
+                question: "§50 zur Barrierefreiheit: Welches Leitsystem für Sehbehinderte ist im öffentlichen Bereich verpflichtend?",
+                regulationLink: "Siehe NBauVO SH 2026, §50 Abs. 2",
+                options: [{ text: "Akustische Signale an Türen.", highlightId: null },{ text: "Taktile Bodenindikatoren.", highlightId: 'foundation' },{ text: "Farbliche Kontraststreifen.", highlightId: null }],
+                correctAnswer: 1,
+                hint: "Welches System ermöglicht Orientierung durch Ertasten mit Füßen oder Stock?",
+                successText: "Das Gebäude ist von außen fertig. Der Innenausbau läuft!",
+                relevantContacts: { correct: 0, incorrect: 3 }
+            },
+            {
+                phase: "Phase 7: Abnahme & Einweihung",
+                question: "§68 fordert die \"Digitale Dokumentation\". Was muss dem Bauamt als \"digitaler Zwilling\" übergeben werden?",
+                regulationLink: "Siehe NBauVO SH 2026, §68 Abs. 5",
+                options: [{ text: "Eine Sammlung aller Rechnungen.", highlightId: null },{ text: "Eine Fotodokumentation.", highlightId: null },{ text: "Das vollständige BIM-Modell.", highlightId: 'structure' }],
+                correctAnswer: 2,
+                hint: "Was ist das digitale Äquivalent zum realen Gebäude für den späteren Betrieb?",
+                successText: "Alles abgenommen! Das Rathaus ist bereit für die Einweihung.",
+                relevantContacts: { correct: 1, incorrect: 4 }
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let answered = false;
+        let contactsAnswered = false;
+        const phaseTitleEl = document.getElementById('phase-title');
+        const questionTextEl = document.getElementById('question-text');
+        const regulationLinkEl = document.getElementById('regulation-link');
+        const optionsContainerEl = document.getElementById('options-container');
+        const contactsContainerEl = document.getElementById('contacts-container');
+        const feedbackBoxEl = document.getElementById('feedback-box');
+        const feedbackTitleEl = document.getElementById('feedback-title');
+        const feedbackTextEl = document.getElementById('feedback-text');
+        const retryButton = document.getElementById('retry-button');
+        const nextQuestionContainer = document.getElementById('next-question-container');
+        const nextQuestionButton = document.getElementById('next-question-button');
+        const successTextEl = document.getElementById('success-text');
+        const progressBar = document.getElementById('progress-bar');
+
+        function loadQuestion() {
+            answered = false;
+            contactsAnswered = false;
+            const currentQuestion = quizData[currentQuestionIndex];
+            phaseTitleEl.textContent = currentQuestion.phase;
+            questionTextEl.textContent = currentQuestion.question;
+            regulationLinkEl.textContent = currentQuestion.regulationLink;
+            optionsContainerEl.innerHTML = '';
+            contactsContainerEl.innerHTML = '';
+            feedbackBoxEl.style.display = 'none';
+            nextQuestionContainer.style.display = 'none';
+            
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.innerHTML = `<span class="font-bold mr-3">${String.fromCharCode(65 + index)}</span> ${option.text}`;
+                button.className = 'option-button w-full text-left p-4 bg-white border-2 border-gray-200 rounded-lg hover:bg-sky-50 hover:border-sky-500';
+                button.onclick = () => selectAnswer(index, button);
+                button.onmouseover = () => toggleHighlight(option.highlightId, true);
+                button.onmouseout = () => toggleHighlight(option.highlightId, false);
+                optionsContainerEl.appendChild(button);
+            });
+            
+            const contactIds = [currentQuestion.relevantContacts.correct, currentQuestion.relevantContacts.incorrect];
+            contactIds.sort(() => Math.random() - 0.5); 
+
+            contactIds.forEach(contactId => {
+                const contact = contacts[contactId];
+                const card = document.createElement('div');
+                card.className = 'contact-card cursor-pointer p-2 border-2 bg-gray-50 rounded-lg flex items-center space-x-2';
+                card.innerHTML = `<img src="${contact.avatar}" class="w-10 h-10 rounded-full"><div class="text-sm"><div class="font-bold">${contact.name}</div><div class="text-gray-500">${contact.dept}</div></div><div class="contact-feedback"></div>`;
+                card.onclick = () => selectContact(card, contactId === currentQuestion.relevantContacts.correct);
+                contactsContainerEl.appendChild(card);
+            });
+        }
+        
+        function selectContact(card, isCorrect) {
+            if (contactsAnswered) return;
+            contactsAnswered = true;
+            const feedbackEl = card.querySelector('.contact-feedback');
+            if (isCorrect) {
+                feedbackEl.innerHTML = '&#10003;';
+                feedbackEl.className += ' bg-green-500 show';
+            } else {
+                feedbackEl.innerHTML = '&#10005;';
+                feedbackEl.className += ' bg-red-500 show';
+            }
+        }
+
+        function toggleHighlight(partId, show) {
+            if (!partId || !buildingParts[partId]) return;
+            const part = buildingParts[partId];
+            
+            function setMaterial(obj, material) {
+                if (obj.isMesh) {
+                    if (!obj.originalMaterial) obj.originalMaterial = obj.material;
+                    obj.material = material;
+                }
+                if (obj.children) {
+                    obj.children.forEach(child => setMaterial(child, material));
+                }
+            }
+            
+            if (show) {
+                setMaterial(part, highlightMat);
+            } else {
+                 if (part.isMesh) {
+                    if (part.originalMaterial) part.material = part.originalMaterial;
+                }
+                 if (part.children) {
+                    part.children.forEach(child => {
+                         if (child.isMesh && child.originalMaterial) {
+                            child.material = child.originalMaterial;
+                        }
+                    });
+                }
+            }
+        }
+
+        function selectAnswer(selectedIndex, button) {
+            if (answered) return;
+            answered = true;
+            const currentQuestion = quizData[currentQuestionIndex];
+            if (selectedIndex === currentQuestion.correctAnswer) {
+                button.classList.add('correct');
+                successTextEl.textContent = currentQuestion.successText;
+                nextQuestionContainer.style.display = 'block';
+                updateConstructionSite();
+            } else {
+                button.classList.add('incorrect');
+                if(currentQuestion.failAnimation) currentQuestion.failAnimation();
+                feedbackTitleEl.textContent = "Tipp";
+                feedbackTextEl.textContent = currentQuestion.hint;
+                feedbackBoxEl.className = "mt-auto p-4 border-l-4 rounded-r-lg bg-yellow-50 border-yellow-500";
+                feedbackTitleEl.className = "font-bold text-yellow-800";
+                feedbackTextEl.className = "mt-2 text-yellow-700";
+                retryButton.className = "mt-4 w-full text-white font-bold py-2 px-4 rounded-lg transition-colors bg-yellow-500 hover:bg-yellow-600";
+                feedbackBoxEl.style.display = 'block';
+            }
+        }
+        
+        function updateConstructionSite() {
+            addBuildingPart(currentQuestionIndex);
+            const progressPercentage = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+            const currentDot = document.getElementById(`progress-dot-${currentQuestionIndex}`);
+            if(currentDot) currentDot.classList.add('completed');
+        }
+
+        function showCompletionScreen() {
+            const completionScreen = document.getElementById('completion-screen');
+            completionScreen.classList.add('active');
+        }
+
+        retryButton.onclick = () => {
+            answered = false;
+            feedbackBoxEl.style.display = 'none';
+            optionsContainerEl.querySelectorAll('button').forEach(btn => btn.classList.remove('incorrect'));
+        };
+
+        nextQuestionButton.onclick = () => {
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextQuestionContainer.style.display = 'none';
+                showCompletionScreen();
+            } else {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        };
+        
+        // --- Modal Logic ---
+        const aktenModal = document.getElementById('akten-detektiv-modal');
+        const startAktenButton = document.getElementById('start-akten-detektiv');
+        const closeAktenButton = document.getElementById('close-akten-detektiv');
+        startAktenButton.addEventListener('click', () => aktenModal.classList.add('active'));
+        closeAktenButton.addEventListener('click', () => aktenModal.classList.remove('active'));
+
+        const vergabeModal = document.getElementById('vergabe-challenge-modal');
+        const startVergabeButton = document.getElementById('start-vergabe-challenge');
+        const closeVergabeButton = document.getElementById('close-vergabe-challenge');
+        startVergabeButton.addEventListener('click', () => vergabeModal.classList.add('active'));
+        closeVergabeButton.addEventListener('click', () => vergabeModal.classList.remove('active'));
+        
+        const dialogModal = document.getElementById('dialog-simulator-modal');
+        const startDialogButton = document.getElementById('start-dialog-simulator');
+        const closeDialogButton = document.getElementById('close-dialog-simulator');
+        startDialogButton.addEventListener('click', () => dialogModal.classList.add('active'));
+        closeDialogButton.addEventListener('click', () => dialogModal.classList.remove('active'));
+        
+        window.updateDialog = function(button, responseType) {
+            const dialogText = document.getElementById('dialog-text');
+            const options = document.getElementById('dialog-options');
+            options.innerHTML = ''; // Clear options
+            
+            switch(responseType) {
+                case 'deescalating':
+                    dialogText.innerHTML = "<span class='text-green-600'>[Positiv]</span> \"Oh, das tut mir leid zu hören. Okay, danke für die Information. Was genau können wir denn tun?\"";
+                    break;
+                case 'factual':
+                     dialogText.innerHTML = "<span class='text-yellow-600'>[Neutral]</span> \"Gesetze interessieren mich nicht, mein Schlaf ist gestört! Ich will, dass das aufhört.\"";
+                    break;
+                case 'dismissive':
+                     dialogText.innerHTML = "<span class='text-red-600'>[Negativ]</span> \"Schriftlich? Das ist ja unglaublich! Ich werde mich an die Presse wenden!\"";
+                    break;
+            }
+        }
+
+        // --- INIT ---
+        init3D();
+        loadQuestion();
+
+    </script>
 </body>
 </html>
-
